@@ -153,6 +153,18 @@ class HindiDocConverter {
             "mnkgj.k" => 'उदाहरण',
             'fofHkUu' => 'विभिन्न',
             'izdkj' => 'प्रकार',
+             ',oa' => 'और',
+        'rekk' => 'तथा', 
+        'vkfn' => 'आदि',
+        'dk' => 'का',
+        'osQ' => 'के',
+        'vkSj' => 'और',
+        'djk;k' => 'दिया',
+        'ksa' => 'ों',
+        'tk' => 'जा',
+        'pqdk' => 'चुका',
+        'gS' => 'है',
+        'lg' => 'सह',
             // Add more mappings as needed
         );
         
