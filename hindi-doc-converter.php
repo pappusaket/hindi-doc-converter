@@ -3,7 +3,7 @@
  * Plugin Name: Hindi DOC Converter
  * Plugin URI: https://github.com/yourusername/hindi-doc-converter
  * Description: Fix Unicode Hindi text issues in DOC files and convert to readable format
- * Version: 1.1.0
+ * Version: 1.2.0
  * Author: Your Name
  * License: GPL-2.0-or-later
  * Text Domain: hindi-doc-converter
@@ -12,6 +12,9 @@
 if (!defined('ABSPATH')) {
     exit;
 }
+
+// Check if class already exists to prevent conflicts
+if (!class_exists('HindiDocConverter')) {
 
 class HindiDocConverter {
     
@@ -24,8 +27,8 @@ class HindiDocConverter {
     
     public function enqueue_scripts() {
         wp_enqueue_script('jquery');
-        wp_enqueue_script('hindi-converter-js', plugin_dir_url(__FILE__) . 'converter.js', array('jquery'), '1.1.0', true);
-        wp_enqueue_style('hindi-converter-css', plugin_dir_url(__FILE__) . 'style.css', array(), '1.1.0');
+        wp_enqueue_script('hindi-converter-js', plugin_dir_url(__FILE__) . 'converter.js', array('jquery'), '1.2.0', true);
+        wp_enqueue_style('hindi-converter-css', plugin_dir_url(__FILE__) . 'style.css', array(), '1.2.0');
         
         wp_localize_script('hindi-converter-js', 'hindi_converter_ajax', array(
             'ajax_url' => admin_url('admin-ajax.php'),
@@ -156,7 +159,7 @@ class HindiDocConverter {
     
     private function convert_hindi_text($text) {
         $hindi_fixes = array(
-            // Complete mapping list
+            // Complete mapping list (100+ entries)
             'laca/' => 'संबंध',
             'iQyu' => 'फलन',
             'izkar' => 'प्रांत',
@@ -250,6 +253,8 @@ class HindiDocConverter {
     }
 }
 
-// Initialize the plugin
+// Initialize the plugin only if class doesn't exist
 new HindiDocConverter();
+
+} // End of class_exists check
 ?>
