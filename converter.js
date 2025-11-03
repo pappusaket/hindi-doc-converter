@@ -8,7 +8,7 @@ jQuery(document).ready(function($) {
             alert('Please select a file first.');
             return;
         }
-        
+    
         var formData = new FormData();
         formData.append('action', 'process_hindi_file');
         formData.append('nonce', hindi_converter_ajax.nonce);
@@ -113,6 +113,18 @@ function fixHindiText(text) {
         'rks': 'तो',
         'vkSj': 'और',
         ';fn': 'यदि'
+         ',oa' => 'और',
+        'rekk' => 'तथा', 
+        'vkfn' => 'आदि',
+        'dk' => 'का',
+        'osQ' => 'के',
+        'vkSj' => 'और',
+        'djk;k' => 'दिया',
+        'ksa' => 'ों',
+        'tk' => 'जा',
+        'pqdk' => 'चुका',
+        'gS' => 'है',
+        'lg' => 'सह',
     };
     
     var converted = text;
