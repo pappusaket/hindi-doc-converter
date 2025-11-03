@@ -1,0 +1,214 @@
+/* Hindi DOC Converter Styles */
+.hindi-converter-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.converter-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 10px;
+}
+
+.converter-header h2 {
+    margin: 0 0 10px 0;
+    font-size: 2em;
+}
+
+.converter-header p {
+    margin: 0;
+    opacity: 0.9;
+}
+
+.upload-section, .text-section {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #e9ecef;
+}
+
+.upload-section h3, .text-section h3 {
+    margin-top: 0;
+    color: #495057;
+    border-bottom: 2px solid #dee2e6;
+    padding-bottom: 10px;
+}
+
+.file-input-wrapper {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.file-input-wrapper input[type="file"] {
+    position: absolute;
+    left: -9999px;
+}
+
+.file-input-label {
+    display: block;
+    padding: 15px;
+    background: white;
+    border: 2px dashed #6c757d;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.file-input-label:hover {
+    border-color: #007cba;
+    background: #f8f9fa;
+}
+
+.file-input-text {
+    color: #6c757d;
+    font-weight: 500;
+}
+
+#directText {
+    width: 100%;
+    height: 150px;
+    padding: 15px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+.convert-btn {
+    background: #007cba;
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background 0.3s ease;
+    display: inline-block;
+}
+
+.convert-btn:hover {
+    background: #005a87;
+}
+
+.convert-btn.secondary {
+    background: #28a745;
+}
+
+.convert-btn.secondary:hover {
+    background: #1e7e34;
+}
+
+.result-section {
+    background: #e7f4e4;
+    padding: 25px;
+    border-radius: 10px;
+    border-left: 4px solid #46b450;
+    display: none;
+}
+
+.result-section h3 {
+    margin-top: 0;
+    color: #2d5016;
+}
+
+.converted-content {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    font-family: 'Nirmala UI', 'Mangal', 'Arial Unicode MS', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    max-height: 400px;
+    overflow-y: auto;
+    border: 1px solid #c3e6cb;
+}
+
+.action-buttons {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.action-btn {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin: 0 5px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.copy-btn {
+    background: #17a2b8;
+    color: white;
+}
+
+.copy-btn:hover {
+    background: #138496;
+}
+
+.download-btn {
+    background: #6c757d;
+    color: white;
+}
+
+.download-btn:hover {
+    background: #545b62;
+}
+
+.loading-spinner {
+    text-align: center;
+    padding: 30px;
+    display: none;
+}
+
+.loading-spinner p {
+    font-style: italic;
+    color: #6c757d;
+    font-size: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hindi-converter-container {
+        padding: 10px;
+    }
+    
+    .upload-section, .text-section {
+        padding: 15px;
+    }
+    
+    .converter-header h2 {
+        font-size: 1.5em;
+    }
+    
+    .action-buttons {
+        text-align: left;
+    }
+    
+    .action-btn {
+        display: block;
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+
+/* Hindi font support */
+@font-face {
+    font-family: 'Nirmala UI';
+    src: local('Nirmala UI');
+}
+
+.hindi-text {
+    font-family: 'Nirmala UI', 'Mangal', 'Arial Unicode MS', sans-serif;
+}
