@@ -65,7 +65,6 @@ function convertDirectText() {
 // Hindi text conversion function
 function fixHindiText(text) {
     var fixes = {
-        // Basic words
         'laca/': 'संबंध',
         'iQyu': 'फलन',
         'izkar': 'प्रांत',
@@ -98,39 +97,52 @@ function fixHindiText(text) {
         "mnkgj.k": 'उदाहरण',
         'fofHkUu': 'विभिन्न',
         'izdkj': 'प्रकार',
-        
-        // COMPREHENSIVE MAPPINGS
-        ',oa': 'और',
-        'rekk': 'तथा',
-        'vkfn': 'आदि',
-        'dk': 'का',
+        'bl': 'इस',
         'osQ': 'के',
-        'vkSj': 'और',
-        'djk;k': 'दिया',
-        'ksa': 'ों',
-        'tk': 'जा',
-        'pqdk': 'चुका',
         'gS': 'है',
         'gSa': 'हैं',
-        'lg': 'सह',
+        'fd': 'कि',
+        'rekk': 'तथा',
+        'vkfn': 'आदि',
         'dh': 'की',
+        'dk': 'का',
         'ls': 'से',
         'ij': 'पर',
-        'rks': 'तो',
-        ';fn': 'यदि',
-        'bl': 'इस',
-        'mlh': 'उसी',
-        'fd': 'कि',
-        'fdlh': 'किसी',
         'osQ': 'के',
-        'muosQ': 'उनके',
-        'bldk': 'इसका',
-        'rqY;rk': 'तुल्यता',
-        'rqY;': 'तुल्य',
-        'LorqY;': 'स्वतुल्य',
-        'lefer': 'सममित',
-        'laØked': 'संक्रामक',
-        'rqY;rk laca/': 'तुल्यता संबंध',
-        'rqY;rk oxZ': 'तुल्यता वर्ग',
-        'mileqPp;': 'उपसमुच्चय',
-        'la
+        ',oa': 'और',
+        'rks': 'तो',
+        'vkSj': 'और',
+        ';fn': 'यदि'
+    };
+    
+    var converted = text;
+    for (var garbled in fixes) {
+        var regex = new RegExp(garbled, 'g');
+        converted = converted.replace(regex, fixes[garbled]);
+    }
+    
+    return converted.replace(/\n/g, '<br>');
+}
+
+// Utility functions
+function copyToClipboard() {
+    var text = document.getElementById('convertedContent').innerText;
+    navigator.clipboard.writeText(text).then(function() {
+        alert('Text copied to clipboard!');
+    }).catch(function() {
+        alert('Failed to copy text. Please select and copy manually.');
+    });
+}
+
+function downloadText() {
+    var text = document.getElementById('convertedContent').innerText;
+    var blob = new Blob([text], { type: 'text/plain; charset=utf-8' });
+    var url = window.URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'converted-hindi-text-' + new Date().getTime() + '.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+}
