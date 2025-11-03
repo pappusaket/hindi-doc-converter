@@ -1,22 +1,67 @@
 jQuery(document).ready(function($) {
+    // Show status function
+    function showStatus(message, type = 'info') {
+        $('#statusMessage').text(message);
+        $('#statusBar').show().removeClass('status-success status-error').addClass('status-' + type);
+        
+        // Animate progress bar
+        $('#progressFill').css('width', '0%');
+        $('#progressFill').animate({ width: '100%' }, 1000);
+    }
+    
+    // Hide status function
+    function hideStatus() {
+        $('#statusBar').hide();
+    }
+    
+    // Show error function
+    function showError(message) {
+        $('#errorMessage').text(message);
+        $('#errorSection').show();
+        showStatus('Conversion failed', 'error');
+    }
+    
+    // Hide error function
+    function hideError() {
+        $('#errorSection').hide();
+    }
+    
+    // Show loading state for buttons
+    function setButtonLoading(button, isLoading) {
+        var btnText = button.find('.btn-text');
+        var btnSpinner = button.find('.btn-spinner');
+        
+        if (isLoading) {
+            btnText.hide();
+            btnSpinner.show();
+            button.prop('disabled', true);
+        } else {
+            btnText.show();
+            btnSpinner.hide();
+            button.prop('disabled', false);
+        }
+    }
+    
     // File upload form handling
     $('#hindiUploadForm').on('submit', function(e) {
         e.preventDefault();
         
         var fileInput = $('#hindiFile')[0];
         if (fileInput.files.length === 0) {
-            alert('Please select a file first.');
+            showError('Please select a file first.');
             return;
         }
-    
+        
         var formData = new FormData();
         formData.append('action', 'process_hindi_file');
         formData.append('nonce', hindi_converter_ajax.nonce);
         formData.append('hindi_file', fileInput.files[0]);
         
-        // Show loading, hide results
-        $('#loadingSpinner').show();
+        // Show loading states
+        showStatus('Uploading and processing file...', 'info');
+        setButtonLoading($('#uploadConvertBtn'), true);
         $('#resultSection').hide();
+        hideError();
         
         $.ajax({
             url: hindi_converter_ajax.ajax_url,
@@ -24,18 +69,33 @@ jQuery(document).ready(function($) {
             data: formData,
             processData: false,
             contentType: false,
+            xhr: function() {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress", function(evt) {
+                    if (evt.lengthComputable) {
+                        var percentComplete = (evt.loaded / evt.total) * 100;
+                        $('#progressFill').css('width', percentComplete + '%');
+                    }
+                }, false);
+                return xhr;
+            },
             success: function(response) {
-                $('#loadingSpinner').hide();
+                setButtonLoading($('#uploadConvertBtn'), false);
+                
                 if (response.success) {
+                    showStatus('Conversion completed successfully!', 'success');
                     $('#convertedContent').html(response.data);
                     $('#resultSection').show();
+                    
+                    // Auto-hide success status after 3 seconds
+                    setTimeout(hideStatus, 3000);
                 } else {
-                    alert('Error: ' + response.data);
+                    showError('Error: ' + response.data);
                 }
             },
-            error: function() {
-                $('#loadingSpinner').hide();
-                alert(hindi_converter_ajax.error_text);
+            error: function(xhr, status, error) {
+                setButtonLoading($('#uploadConvertBtn'), false);
+                showError('Network error: ' + error);
             }
         });
     });
@@ -53,13 +113,57 @@ jQuery(document).ready(function($) {
 function convertDirectText() {
     var text = document.getElementById('directText').value;
     if (!text.trim()) {
-        alert('Please enter some text to convert.');
+        showError('Please enter some text to convert.');
         return;
     }
     
-    var converted = fixHindiText(text);
-    document.getElementById('convertedContent').innerHTML = converted;
-    document.getElementById('resultSection').style.display = 'block';
+    // Show loading state
+    showStatus('Converting text...', 'info');
+    setButtonLoading($('#textConvertBtn'), true);
+    hideError();
+    
+    // Simulate processing time for better UX
+    setTimeout(function() {
+        try {
+            var converted = fixHindiText(text);
+            document.getElementById('convertedContent').innerHTML = converted;
+            document.getElementById('resultSection').style.display = 'block';
+            showStatus('Text conversion completed!', 'success');
+            setButtonLoading($('#textConvertBtn'), false);
+            
+            // Auto-hide success status after 3 seconds
+            setTimeout(hideStatus, 3000);
+        } catch (error) {
+            showError('Conversion error: ' + error.message);
+            setButtonLoading($('#textConvertBtn'), false);
+        }
+    }, 500);
+}
+
+// Global functions
+window.showError = function(message) {
+    $('#errorMessage').text(message);
+    $('#errorSection').show();
+}
+
+window.hideError = function() {
+    $('#errorSection').hide();
+}
+
+window.setButtonLoading = function(button, isLoading) {
+    var btn = $(button);
+    var btnText = btn.find('.btn-text');
+    var btnSpinner = btn.find('.btn-spinner');
+    
+    if (isLoading) {
+        btnText.hide();
+        btnSpinner.show();
+        btn.prop('disabled', true);
+    } else {
+        btnText.show();
+        btnSpinner.hide();
+        btn.prop('disabled', false);
+    }
 }
 
 // Hindi text conversion function
@@ -97,34 +201,57 @@ function fixHindiText(text) {
         "mnkgj.k": 'उदाहरण',
         'fofHkUu': 'विभिन्न',
         'izdkj': 'प्रकार',
-        'bl': 'इस',
-        'osQ': 'के',
-        'gS': 'है',
-        'gSa': 'हैं',
-        'fd': 'कि',
+        ',oa': 'और',
         'rekk': 'तथा',
         'vkfn': 'आदि',
-        'dh': 'की',
         'dk': 'का',
+        'osQ': 'के',
+        'vkSj': 'और',
+        'djk;k': 'दिया',
+        'ksa': 'ों',
+        'tk': 'जा',
+        'pqdk': 'चुका',
+        'gS': 'है',
+        'gSa': 'हैं',
+        'lg': 'सह',
+        'bl': 'इस',
+        'fd': 'कि',
+        'dh': 'की',
         'ls': 'से',
         'ij': 'पर',
-        'osQ': 'के',
-        ',oa': 'और',
         'rks': 'तो',
-        'vkSj': 'और',
-        ';fn': 'यदि'
-         ',oa' => 'और',
-        'rekk' => 'तथा', 
-        'vkfn' => 'आदि',
-        'dk' => 'का',
-        'osQ' => 'के',
-        'vkSj' => 'और',
-        'djk;k' => 'दिया',
-        'ksa' => 'ों',
-        'tk' => 'जा',
-        'pqdk' => 'चुका',
-        'gS' => 'है',
-        'lg' => 'सह',
+        ';fn': 'यदि',
+        'vk': 'क',
+        'mu': 'उन',
+        'osQ': 'के',
+        'vki': 'आप',
+        'ge': 'हम',
+        ';g': 'यह',
+        'Hkh': 'भी',
+        'ugha': 'नहीं',
+        'gk¡': 'हाँ',
+        'dks': 'को',
+        'ds': 'के',
+        'esa': 'में',
+        'us': 'ने',
+        'cjkcj': 'बराबर',
+        'tks': 'जो',
+        'rFkk': 'और',
+        'vFkok': 'या',
+        'ykxw': 'लागू',
+        'gksrk': 'होता',
+        'gksrs': 'होते',
+        'gksrh': 'होती',
+        'gks': 'हो',
+        'dj': 'कर',
+        'djrs': 'करते',
+        'fd;k': 'किया',
+        'tkrk': 'जाता',
+        'tkrh': 'जाती',
+        'tkrs': 'जाते',
+        'ldrs': 'सकते',
+        'ldrh': 'सकती',
+        'ldrk': 'सकता'
     };
     
     var converted = text;
@@ -140,9 +267,10 @@ function fixHindiText(text) {
 function copyToClipboard() {
     var text = document.getElementById('convertedContent').innerText;
     navigator.clipboard.writeText(text).then(function() {
-        alert('Text copied to clipboard!');
+        showStatus('Text copied to clipboard!', 'success');
+        setTimeout(hideStatus, 2000);
     }).catch(function() {
-        alert('Failed to copy text. Please select and copy manually.');
+        showError('Failed to copy text. Please select and copy manually.');
     });
 }
 
@@ -157,4 +285,15 @@ function downloadText() {
     a.click();
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
+    showStatus('File downloaded successfully!', 'success');
+    setTimeout(hideStatus, 2000);
+}
+
+function clearAll() {
+    document.getElementById('directText').value = '';
+    document.getElementById('hindiFile').value = '';
+    document.getElementById('resultSection').style.display = 'none';
+    hideError();
+    hideStatus();
+    $('.file-input-text').text('Choose TXT file');
 }
